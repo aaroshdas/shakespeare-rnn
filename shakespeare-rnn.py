@@ -122,7 +122,7 @@ def back_propagation(inputs, wL,wS, b, activationFunc, learningRate, epochs, cIn
             if((ind+cIndex)%25000 == 0):
                 with open("w_b_current.pkl", "wb") as f:
                     pickle.dump((wL, wS, b, ind+cIndex), f)
-                    print("current w/b filed save")
+                    print(f"current w/b filed save ({str(ind+cIndex)})")
                 if((ind+cIndex)%100000 == 0):
                     with open(f"w_b_{str(ind+cIndex)}.pkl", "wb") as f:
                         pickle.dump((wL, wS, b), f)

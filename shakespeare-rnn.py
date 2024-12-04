@@ -119,11 +119,11 @@ def back_propagation(inputs, wL,wS, b, activationFunc, learningRate, epochs, cur
                 wS[layer] = wS[layer]+(learningRate*weightSSum)
                 b[layer]=b[layer]+(learningRate*biasSum)     
             if(ind+currentIndex%50000 == 0):
+                with open("w_b_current.pkl", "wb") as f:
+                    pickle.dump((wL, wS, b, ind+currentIndex), f)
                 if(ind+currentIndex%100000 == 0):
                     with open(f"w_b_{str(ind+currentIndex)}.pkl", "wb") as f:
                         pickle.dump((wL, wS, b), f)
-                with open("w_b_current.pkl", "wb") as f:
-                    pickle.dump((wL, wS, b, ind+currentIndex), f)
     return wS,wL, b
 
 

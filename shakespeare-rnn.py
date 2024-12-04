@@ -58,7 +58,7 @@ def softmax(dot_x):
 def softmax_derivative(x, y):
     return (np.eye(y.shape[0]) + (-1 * x)) @y
 
-def back_propagation(inputs, wL,wS, b, activationFunc, learningRate, epochs, currentIndex):
+def back_propagation(inputs, wL,wS, b, activationFunc, learningRate, epochs, cIndex):
     for epoch in range(epochs):     
         for ind, rawInput in enumerate(inputs): #inp[input, output]
             inputOneHot = []
@@ -118,12 +118,15 @@ def back_propagation(inputs, wL,wS, b, activationFunc, learningRate, epochs, cur
                 wL[layer] = wL[layer]+(learningRate*weightLSum) 
                 wS[layer] = wS[layer]+(learningRate*weightSSum)
                 b[layer]=b[layer]+(learningRate*biasSum)     
-            if(ind+currentIndex%50000 == 0):
+    
+            if((ind+cIndex)%25000 == 0):
                 with open("w_b_current.pkl", "wb") as f:
-                    pickle.dump((wL, wS, b, ind+currentIndex), f)
-                if(ind+currentIndex%100000 == 0):
-                    with open(f"w_b_{str(ind+currentIndex)}.pkl", "wb") as f:
+                    pickle.dump((wL, wS, b, ind+cIndex), f)
+                    print("current w/b filed save")
+                if((ind+cIndex)%100000 == 0):
+                    with open(f"w_b_{str(ind+cIndex)}.pkl", "wb") as f:
                         pickle.dump((wL, wS, b), f)
+                        print("time stamp file generated")
     return wS,wL, b
 
 
@@ -152,6 +155,5 @@ with open("shakespeare-tests.pkl", "rb") as f:
     data = pickle.load(f)    
     with open("w_b_current.pkl", "rb") as f:
         w1L, w1S, b1, currIdx = pickle.load(f)
-    print(currIdx)
     back_propagation(data, w1L, w1S, b1, np.tanh, 0.01, 5, currIdx)
 

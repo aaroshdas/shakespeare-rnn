@@ -69,6 +69,7 @@ def generate(wL,wS, b, activationFunc, letters):
     print(oneHotVectorsKeys[maxI])
     print(As[(len(wL)-1, len(inp))][maxI,0])
     print(maxI)
+    
     print(len(letters))
 
 with open("shakespeare-tests.pkl", "rb") as f:

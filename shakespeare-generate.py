@@ -75,5 +75,6 @@ with open("shakespeare-tests.pkl", "rb") as f:
     with open("w_b_current.pkl", "rb") as f:
         w1L, w1S, b1, currIdx = pickle.load(f)
     generate(w1L, w1S, b1, np.tanh, "First cit".lower())
+    print(currIdx)
 
 print(oneHotVectorsKeys)

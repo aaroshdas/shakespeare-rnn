@@ -61,11 +61,11 @@ def generate(wL,wS, b, activationFunc, letter):
     dots[(len(wL)-1, len(inp))] =wL[len(wL)-1]@As[(len(wL)-2, len(inp))]
     As[(len(wL)-1, len(inp))] = softmax(dots[(len(wL)-1, len(inp))])
     print(As)
-         
+    # print(b1)
 
 print(oneHotVectorsKeys)
 with open("shakespeare-tests.pkl", "rb") as f:
     with open("w_b_current.pkl", "rb") as f:
-        w1L, w1S, b1 = pickle.load(f)
-    generate(w1L, w1S, b1, np.tanh, "t")
+        w1L, w1S, b1, currIdx = pickle.load(f)
+    generate(w1L, w1S, b1, np.tanh, "a")
 

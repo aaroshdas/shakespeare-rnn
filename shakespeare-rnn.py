@@ -108,7 +108,7 @@ def back_propagation(inputs, wL,wS, b, activationFunc, learningRate, epochs, cIn
                     print(f"current w/b filed save ({str(ind+cIndex)})")
                 if((ind+cIndex)%100000 == 0):
                     with open(f"w_b_{str(ind+cIndex)}.pkl", "wb") as f:
-                        pickle.dump((wL, wS, b), f)
+                        pickle.dump((wL, wS, b, ind+cIndex), f)
                         print("time stamp file generated")
     return wS,wL, b
 
@@ -137,5 +137,5 @@ with open("shakespeare-tests.pkl", "rb") as f:
     data = pickle.load(f)    
     with open("w_b_current.pkl", "rb") as f:
         w1L, w1S, b1,currIdx = pickle.load(f)
-    back_propagation(data, w1L, w1S, b1, np.tanh, 0.01, 5, currIdx)
+    back_propagation(data, w1L, w1S, b1, np.tanh, 0.001, 5, currIdx)
 

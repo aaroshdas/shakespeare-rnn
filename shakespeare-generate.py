@@ -61,16 +61,19 @@ def generate(wL,wS, b, activationFunc, letters):
     #check dimensions should by like 38x0 no 128x1
     dots[(len(wL)-1, len(inp))] =wL[len(wL)-1]@As[(len(wL)-2, len(inp))]
     As[(len(wL)-1, len(inp))] = softmax(dots[(len(wL)-1, len(inp))])
-    print(As)
+    print(As[(len(wL)-1, len(inp))])
     maxI = 0
     for i in range(39):
         if(As[(len(wL)-1, len(inp))][i,0] > As[(len(wL)-1, len(inp))][maxI, 0]):
             maxI = i
     print(oneHotVectorsKeys[maxI])
+    print(As[(len(wL)-1, len(inp))][maxI,0])
+    print(maxI)
+    print(len(letters))
 
 with open("shakespeare-tests.pkl", "rb") as f:
     with open("w_b_current.pkl", "rb") as f:
         w1L, w1S, b1, currIdx = pickle.load(f)
-    generate(w1L, w1S, b1, np.tanh, "First Citizen: Before we proceed.".lower())
+    generate(w1L, w1S, b1, np.tanh, "First cit".lower())
 
 print(oneHotVectorsKeys)

@@ -42,9 +42,10 @@ def softmax(dot_x):
 def softmax_derivative(x, y):
     return (np.eye(y.shape[0]) + (-1 * x)) @y
 
-def generate(wL,wS, b, activationFunc, letter):   
+def generate(wL,wS, b, activationFunc, letters):   
     inp = []
-    inp.append(convert_to_one_hot(letter))
+    for i in letters:
+        inp.append(convert_to_one_hot(i))
 
     As ={} 
     dots = {}
@@ -61,11 +62,15 @@ def generate(wL,wS, b, activationFunc, letter):
     dots[(len(wL)-1, len(inp))] =wL[len(wL)-1]@As[(len(wL)-2, len(inp))]
     As[(len(wL)-1, len(inp))] = softmax(dots[(len(wL)-1, len(inp))])
     print(As)
-    # print(b1)
+    maxI = 0
+    for i in range(39):
+        if(As[(len(wL)-1, len(inp))][i,0] > As[(len(wL)-1, len(inp))][maxI, 0]):
+            maxI = i
+    print(oneHotVectorsKeys[maxI])
 
-print(oneHotVectorsKeys)
 with open("shakespeare-tests.pkl", "rb") as f:
     with open("w_b_current.pkl", "rb") as f:
         w1L, w1S, b1, currIdx = pickle.load(f)
-    generate(w1L, w1S, b1, np.tanh, "a")
+    generate(w1L, w1S, b1, np.tanh, "First Citizen: Before we proceed.".lower())
 
+print(oneHotVectorsKeys)

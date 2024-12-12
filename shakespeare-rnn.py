@@ -36,22 +36,6 @@ with open("shakespeare-tests.pkl", "wb") as f:
 def activationFuncDerivative(x):
     return 1 / np.cosh(x) ** 2
 
-def test_func(inputs, wL,wS, b, activationFunc):
-    correctRatio = 0
-    for inp in inputs: #inputs (0,1 stuff like that)
-        As ={} 
-        dots = {}
-        for layer in range(1, len(wL)):
-            As[layer, 0] = np.zeros((len(wL[layer]), 1))
-        for step in range(1, len(inp[0])+1): 
-            As[(0, step)] = np.array([inp[0][step-1]])
-            for layer in range(1, len(wL)):
-                dots[(layer, step)] =wL[layer]@As[(layer-1, step)] + wS[layer] @As[layer, step-1] +b[layer]
-                As[(layer, step)] = activationFunc(dots[(layer, step)])
-        
-        correctRatio +=(inp[1]-As[(len(wL)-1, len(inp[0]))][0,0])**2
-    return correctRatio/len(inputs)
-       
 def softmax(dot_x):
     temp = np.exp(dot_x)
     return temp/np.sum(temp)
@@ -65,6 +49,7 @@ def back_propagation(inputs, wL,wS, b, activationFunc, learningRate, epochs, cIn
             for i in rawInput[0]:
                 inputOneHot.append(convert_to_one_hot(i))
             inp = (inputOneHot,convert_to_one_hot(rawInput[1]))
+
             if(ind%200 == 0):
                 print(ind)
 
@@ -82,7 +67,6 @@ def back_propagation(inputs, wL,wS, b, activationFunc, learningRate, epochs, cIn
             #check dimensions should by like 38x0 no 128x1
             dots[(len(wL)-1, len(inp[0]))] =wL[len(wL)-1]@As[(len(wL)-2, len(inp[0]))]
             As[(len(wL)-1, len(inp[0]))] = softmax(dots[(len(wL)-1, len(inp[0]))])
-
             deltas= {}
         
             deltas[(len(wL)-1, len(inp[0]))] = softmax_derivative(As[(len(wL)-1, len(inp[0]))], inp[1])
@@ -100,10 +84,9 @@ def back_propagation(inputs, wL,wS, b, activationFunc, learningRate, epochs, cIn
                     deltas[(layer, step)]=activationFuncDerivative(dots[(layer, step)])*(np.transpose(wS[layer])@deltas[(layer, step+1)] )+ activationFuncDerivative(dots[(layer, step)])*(np.transpose(wL[layer+1])@deltas[(layer+1, step)])
 
             #new sec same as dnn changing lr
-            for layer in range(1, len(wL)):
-                b[layer] = b[layer]+learningRate*deltas[(layer,len(inp[0]))]
-                wL[layer] = wL[layer]+learningRate*deltas[(layer,len(inp[0]))] *As[(layer,len(inp[0]))]
-    
+            b[len(wL)-1] = b[len(wL)-1]+learningRate*deltas[(len(wL)-1,len(inp[0]))]
+            wL[len(wL)-1] = wL[len(wL)-1]+learningRate*deltas[(len(wL)-1,len(inp[0]))] *As[(len(wL)-1,len(inp[0]))]
+
             #shift down 1
             for layer in range(1, len(wL)-1):
                 biasSum = 0
@@ -150,10 +133,9 @@ def create_rand_values(dimensions):
         
     return weightStep,weightsLayer,biases
 
-
 with open("shakespeare-tests.pkl", "rb") as f:
     data = pickle.load(f)    
     with open("w_b_current.pkl", "rb") as f:
-        w1L, w1S, b1, currIdx = pickle.load(f)
+        w1L, w1S, b1,currIdx = pickle.load(f)
     back_propagation(data, w1L, w1S, b1, np.tanh, 0.01, 5, currIdx)
 

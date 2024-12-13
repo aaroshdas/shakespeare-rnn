@@ -66,16 +66,12 @@ def generate(wL,wS, b, activationFunc, letters):
     for i in range(39):
         if(As[(len(wL)-1, len(inp))][i,0] > As[(len(wL)-1, len(inp))][maxI, 0]):
             maxI = i
-    print(oneHotVectorsKeys[maxI])
     print(As[(len(wL)-1, len(inp))][maxI,0])
     print(maxI)
-    
-    print(len(letters))
+    print(oneHotVectorsKeys[maxI])
 
 with open("shakespeare-tests.pkl", "rb") as f:
     with open("w_b_current.pkl", "rb") as f:
         w1L, w1S, b1, currIdx = pickle.load(f)
+        print(currIdx)
     generate(w1L, w1S, b1, np.tanh, "First cit".lower())
-    print(currIdx)
-
-print(oneHotVectorsKeys)

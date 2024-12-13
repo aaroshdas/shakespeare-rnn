@@ -72,7 +72,7 @@ def generate(wL,wS, b, activationFunc, letters):
     print(res)
     return res[0]
 
-temprature=0.7
+temprature=1
 
 # with open("shakespeare-tests.pkl", "rb") as f:
 #     with open("w_b_current.pkl", "rb") as f:

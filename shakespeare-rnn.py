@@ -137,5 +137,5 @@ with open("shakespeare-tests.pkl", "rb") as f:
     data = pickle.load(f)    
     with open("w_b_current.pkl", "rb") as f:
         w1L, w1S, b1,currIdx = pickle.load(f)
-    back_propagation(data, w1L, w1S, b1, np.tanh, 0.001, 5, currIdx)
+    back_propagation(data, w1L, w1S, b1, np.tanh, 0.001, 1, currIdx)
 

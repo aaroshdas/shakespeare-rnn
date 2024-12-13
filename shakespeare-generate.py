@@ -37,7 +37,7 @@ def activationFuncDerivative(x):
     return 1 / np.cosh(x) ** 2
 
 def softmax(dot_x):
-    temp = np.exp(dot_x)
+    temp = np.exp(dot_x/temprature)
     return temp/np.sum(temp)
 def softmax_derivative(x, y):
     return (np.eye(y.shape[0]) + (-1 * x)) @y
@@ -61,6 +61,7 @@ def generate(wL,wS, b, activationFunc, letters):
     #check dimensions should by like 38x0 no 128x1
     dots[(len(wL)-1, len(inp))] =wL[len(wL)-1]@As[(len(wL)-2, len(inp))]
     As[(len(wL)-1, len(inp))] = softmax(dots[(len(wL)-1, len(inp))])
+
     print(As[(len(wL)-1, len(inp))])
     weights = []
     options = []
@@ -71,8 +72,23 @@ def generate(wL,wS, b, activationFunc, letters):
     print(res)
     return res[0]
 
+temprature=0.7
+
+# with open("shakespeare-tests.pkl", "rb") as f:
+#     with open("w_b_current.pkl", "rb") as f:
+#         w1L, w1S, b1, currIdx = pickle.load(f)
+#         print(currIdx)
+#     print(generate(w1L, w1S, b1, np.tanh, "First citize".lower()))
+# print(oneHotVectorsKeys)
+
 with open("shakespeare-tests.pkl", "rb") as f:
     with open("w_b_current.pkl", "rb") as f:
         w1L, w1S, b1, currIdx = pickle.load(f)
         print(currIdx)
-    print(generate(w1L, w1S, b1, np.tanh, "First citiz".lower()))
+    generation = "".lower()
+    while len(generation) < 150:
+        generation+= generate(w1L, w1S, b1, np.tanh, generation[-100:-1])
+    print("final text:")
+    print(generation)
+
+

@@ -1,7 +1,7 @@
 import numpy as np
 import pickle
 
-from random import shuffle
+from random import shuffle,choices
 
 text = open("shakespeare.txt").read()
 frequency = {}
@@ -62,16 +62,17 @@ def generate(wL,wS, b, activationFunc, letters):
     dots[(len(wL)-1, len(inp))] =wL[len(wL)-1]@As[(len(wL)-2, len(inp))]
     As[(len(wL)-1, len(inp))] = softmax(dots[(len(wL)-1, len(inp))])
     print(As[(len(wL)-1, len(inp))])
-    maxI = 0
+    weights = []
+    options = []
     for i in range(39):
-        if(As[(len(wL)-1, len(inp))][i,0] > As[(len(wL)-1, len(inp))][maxI, 0]):
-            maxI = i
-    print(As[(len(wL)-1, len(inp))][maxI,0])
-    print(maxI)
-    print(oneHotVectorsKeys[maxI])
+        weights.append(As[(len(wL)-1, len(inp))][i,0])
+        options.append(oneHotVectorsKeys[i])
+    res = choices(options, weights=weights, k=5)
+    print(res)
+    return res[0]
 
 with open("shakespeare-tests.pkl", "rb") as f:
     with open("w_b_current.pkl", "rb") as f:
         w1L, w1S, b1, currIdx = pickle.load(f)
         print(currIdx)
-    generate(w1L, w1S, b1, np.tanh, "First cit".lower())
+    print(generate(w1L, w1S, b1, np.tanh, "First citiz".lower()))

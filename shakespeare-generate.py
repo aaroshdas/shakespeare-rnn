@@ -68,7 +68,7 @@ def generate(wL,wS, b, activationFunc, letters):
     for i in range(39):
         weights.append(As[(len(wL)-1, len(inp))][i,0])
         options.append(oneHotVectorsKeys[i])
-    res = choices(options, weights=weights, k=5)
+    res = choices(options, weights=weights, k=1)
     print(res)
     return res[0]
 

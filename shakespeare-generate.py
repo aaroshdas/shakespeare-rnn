@@ -63,32 +63,40 @@ def generate(wL,wS, b, activationFunc, letters):
     As[(len(wL)-1, len(inp))] = softmax(dots[(len(wL)-1, len(inp))])
 
     print(As[(len(wL)-1, len(inp))])
+    
     weights = []
     options = []
     for i in range(39):
         weights.append(As[(len(wL)-1, len(inp))][i,0])
         options.append(oneHotVectorsKeys[i])
     res = choices(options, weights=weights, k=1)
-    print(res)
+    print(res[0])
+
+    maxI = 0
+    for i in range(39):
+        if(As[(len(wL)-1, len(inp))][i,0] > As[(len(wL)-1, len(inp))][maxI, 0]):
+            maxI = i
+    res= [oneHotVectorsKeys[maxI]]
+
     return res[0]
 
 temprature=1
-
-# with open("shakespeare-tests.pkl", "rb") as f:
-#     with open("w_b_current.pkl", "rb") as f:
-#         w1L, w1S, b1, currIdx = pickle.load(f)
-#         print(currIdx)
-#     print(generate(w1L, w1S, b1, np.tanh, "First citize".lower()))
-# print(oneHotVectorsKeys)
 
 with open("shakespeare-tests.pkl", "rb") as f:
     with open("w_b_current.pkl", "rb") as f:
         w1L, w1S, b1, currIdx = pickle.load(f)
         print(currIdx)
-    generation = "".lower()
-    while len(generation) < 150:
-        generation+= generate(w1L, w1S, b1, np.tanh, generation[-100:-1])
-    print("final text:")
-    print(generation)
+    print(generate(w1L, w1S, b1, np.tanh, "First citize".lower()))
+print(oneHotVectorsKeys)
+
+# with open("shakespeare-tests.pkl", "rb") as f:
+#     with open("w_b_current.pkl", "rb") as f:
+#         w1L, w1S, b1, currIdx = pickle.load(f)
+#         print(currIdx)
+#     generation = "".lower()
+#     while len(generation) < 150:
+#         generation+= generate(w1L, w1S, b1, np.tanh, generation[-100:-1])
+#     print("final text:")
+#     print(generation)
 
 
